@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jeevdev | Dev Portfolio — AI, Automation & APIs</title>
+  <meta name="description" content="Portafolio de desarrollo jeevdev: AI Agents, n8n, MCP, Docker, APIs. Soluciones de automatización e inteligencia artificial." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ─── NAV ──────────────────────────────────────────── -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <span class="nav-logo">&lt;jeevdev /&gt;</span>
+      <ul class="nav-links">
+        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#stack">Stack</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─────────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="grid-bg"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Disponible para proyectos
+      </div>
+      <h1 class="hero-title">
+        Automatización &<br/>
+        <span class="gradient-text">Inteligencia Artificial</span>
+      </h1>
+      <p class="hero-sub">
+        Desarrollo soluciones con <strong>AI Agents</strong>, <strong>n8n</strong>, <strong>MCP</strong>,
+        <strong>Docker</strong> y <strong>APIs</strong> para transformar procesos de negocio.
+      </p>
+      <div class="hero-ctas">
+        <a href="#proyectos" class="btn btn-primary">Ver proyectos</a>
+        <a href="#contacto" class="btn btn-ghost">Contactar</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">5+</span>
+          <span class="stat-label">Proyectos</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">AI</span>
+          <span class="stat-label">First</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">Docker</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="code-card">
+        <div class="code-header">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="code-title">agent.py</span>
+        </div>
+        <pre class="code-body"><span class="c-purple">from</span> <span class="c-cyan">mcp</span> <span class="c-purple">import</span> Agent
+<span class="c-purple">from</span> <span class="c-cyan">n8n</span> <span class="c-purple">import</span> Workflow
+
+<span class="c-green"># AI Agent conectado a Jira</span>
+agent <span class="c-white">=</span> Agent(
+  llm<span class="c-white">=</span><span class="c-yellow">"gemini-2.0"</span>,
+  tools<span class="c-white">=</span>[jira, slack, email],
+  docker<span class="c-white">=</span><span class="c-purple">True</span>
+)
+
+<span class="c-cyan">result</span> <span class="c-white">=</span> agent<span class="c-white">.</span>run()</pre>
+        <div class="code-status">
+          <span class="status-dot"></span> Running on Oracle Cloud
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PROYECTOS ─────────────────────────────────────── -->
+  <section class="section" id="proyectos">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// proyectos</span>
+        <h2 class="section-title">Lo que he construido</h2>
+        <p class="section-sub">Sistemas reales, corriendo en producción, con tecnología de vanguardia.</p>
+      </div>
+
+      <div class="projects-grid">
+
+        <!-- Proyecto 1 -->
+        <div class="project-card featured" id="proj-jira">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <div class="card-icon">🎯</div>
+            <div class="card-tags">
+              <span class="tag tag-blue">Node.js</span>
+              <span class="tag tag-purple">Jira API</span>
+              <span class="tag tag-cyan">Docker</span>
+            </div>
+          </div>
+          <h3 class="card-title">Jira Command Center</h3>
+          <p class="card-desc">Dashboard ejecutivo para extraer, filtrar y exportar tareas de Jira en tiempo real. Autenticación segura vía token API, proxy backend y exportación a Excel.</p>
+          <div class="card-stack">
+            <span>Express</span><span>Axios</span><span>Glassmorphism UI</span>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="card-link demo-link" data-project="jira">Ver demo →</a>
+            <span class="card-status online">● En vivo</span>
+          </div>
+        </div>
+
+        <!-- Proyecto 2 -->
+        <div class="project-card" id="proj-n8n">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <div class="card-icon">⚡</div>
+            <div class="card-tags">
+              <span class="tag tag-orange">n8n</span>
+              <span class="tag tag-cyan">Docker</span>
+              <span class="tag tag-green">SMTP</span>
+            </div>
+          </div>
+          <h3 class="card-title">Automatización n8n</h3>
+          <p class="card-desc">Workflows de automatización empresarial: notificaciones por email, integración con APIs externas y procesamiento de datos sin código.</p>
+          <div class="card-stack">
+            <span>n8n</span><span>Webhooks</span><span>REST APIs</span>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="card-link demo-link" data-project="n8n">Ver demo →</a>
+            <span class="card-status building">◐ En desarrollo</span>
+          </div>
+        </div>
+
+        <!-- Proyecto 3 -->
+        <div class="project-card" id="proj-ai">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <div class="card-icon">🤖</div>
+            <div class="card-tags">
+              <span class="tag tag-purple">Gemini</span>
+              <span class="tag tag-blue">LLM</span>
+              <span class="tag tag-cyan">MCP</span>
+            </div>
+          </div>
+          <h3 class="card-title">AI Agents</h3>
+          <p class="card-desc">Agentes de inteligencia artificial con Model Context Protocol (MCP) integrados con Gemini 2.0. Capaces de razonar, planificar y ejecutar tareas complejas.</p>
+          <div class="card-stack">
+            <span>Gemini API</span><span>MCP</span><span>LangChain</span>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="card-link demo-link" data-project="ai">Ver demo →</a>
+            <span class="card-status building">◐ En desarrollo</span>
+          </div>
+        </div>
+
+        <!-- Proyecto 4 -->
+        <div class="project-card" id="proj-sql">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <div class="card-icon">🗄️</div>
+            <div class="card-tags">
+              <span class="tag tag-blue">SQL</span>
+              <span class="tag tag-orange">Python</span>
+              <span class="tag tag-green">Flask</span>
+            </div>
+          </div>
+          <h3 class="card-title">SQL Package Generator</h3>
+          <p class="card-desc">Generador inteligente de paquetes SQL con validación DBA, auto-guardado y sincronización de columnas Jasper. UI premium con glassmorphism.</p>
+          <div class="card-stack">
+            <span>Python</span><span>Flask</span><span>Vanilla JS</span>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="card-link demo-link" data-project="sql">Ver demo →</a>
+            <span class="card-status building">◐ En desarrollo</span>
+          </div>
+        </div>
+
+        <!-- Proyecto 5 -->
+        <div class="project-card" id="proj-mcp">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <div class="card-icon">🔗</div>
+            <div class="card-tags">
+              <span class="tag tag-purple">MCP</span>
+              <span class="tag tag-cyan">Docker</span>
+              <span class="tag tag-blue">APIs</span>
+            </div>
+          </div>
+          <h3 class="card-title">MCP Server</h3>
+          <p class="card-desc">Servidor MCP (Model Context Protocol) que conecta modelos de lenguaje con herramientas y fuentes de datos empresariales de forma segura.</p>
+          <div class="card-stack">
+            <span>MCP Protocol</span><span>Node.js</span><span>Docker</span>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="card-link demo-link" data-project="mcp">Ver demo →</a>
+            <span class="card-status building">◐ En desarrollo</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STACK ─────────────────────────────────────────── -->
+  <section class="section section-dark" id="stack">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// tecnologías</span>
+        <h2 class="section-title">Stack tecnológico</h2>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item"><span class="stack-icon">🐳</span><span>Docker</span></div>
+        <div class="stack-item"><span class="stack-icon">⚡</span><span>n8n</span></div>
+        <div class="stack-item"><span class="stack-icon">🤖</span><span>Gemini AI</span></div>
+        <div class="stack-item"><span class="stack-icon">🔗</span><span>MCP</span></div>
+        <div class="stack-item"><span class="stack-icon">🌐</span><span>REST APIs</span></div>
+        <div class="stack-item"><span class="stack-icon">🟢</span><span>Node.js</span></div>
+        <div class="stack-item"><span class="stack-icon">🐍</span><span>Python</span></div>
+        <div class="stack-item"><span class="stack-icon">🗄️</span><span>SQL Server</span></div>
+        <div class="stack-item"><span class="stack-icon">☁️</span><span>Oracle Cloud</span></div>
+        <div class="stack-item"><span class="stack-icon">🔒</span><span>Cloudflare</span></div>
+        <div class="stack-item"><span class="stack-icon">🎯</span><span>Jira API</span></div>
+        <div class="stack-item"><span class="stack-icon">🚀</span><span>GitHub Actions</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACTO ──────────────────────────────────────── -->
+  <section class="section" id="contacto">
+    <div class="container">
+      <div class="contact-card">
+        <div class="orb orb-contact"></div>
+        <h2 class="contact-title">¿Hablamos?</h2>
+        <p class="contact-sub">Interesado en automatización, AI agents o integración de sistemas.</p>
+        <div class="contact-links">
+          <a href="https://github.com/prosjeventos" class="contact-btn" target="_blank" rel="noopener"><!-- GitHub URL: actualizar si cambias tu username -->
+            <span>GitHub</span>
+          </a>
+          <a href="mailto:prosjeventos@gmail.com" class="contact-btn contact-btn-ghost">
+            <span>Email</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ────────────────────────────────────────── -->
+  <footer class="footer">
+    <p>© 2025 jeevdev · Construido con Docker, AI y café ☕</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
