@@ -1,4 +1,4 @@
-# [Jaime Espinoza] | Senior IT Architect & AI Agent Engineer
+# Jaime Espinoza | Senior IT Architect & AI Agent Engineer
 
 Con más de 30 años en la industria tecnológica y 20 años especializados en el **Sector Educativo**, poseo un profundo dominio del ciclo de vida académico y financiero del alumno. Mi enfoque actual combina la robustez de los sistemas empresariales (ERPs) con la agilidad y potencia de la **Inteligencia Artificial Agéntica**.
 
