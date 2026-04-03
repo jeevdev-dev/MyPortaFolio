@@ -55,4 +55,4 @@ Durante dos décadas he transformado la gestión institucional mediante:
 - **Ubicación:** Chile 🇨🇱
 
 ---
-*Optimizado para demostrar liderazgo técnico y capacidad de innovación constante.*
+*liderazgo técnico y capacidad de innovación constante.*
