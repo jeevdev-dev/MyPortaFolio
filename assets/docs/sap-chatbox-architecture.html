@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAP ChatBox Mani - Experiencia Docente Sincronizada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #020617;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #22d3ee;
+            --accent-purple: #c084fc;
+            --accent-amber: #fbbf24;
+            --accent-emerald: #34d399;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: #fff; 
+            font-family: 'Outfit', sans-serif; 
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(192, 132, 252, 0.03) 0%, transparent 50%);
+        }
+        
+        .box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            position: absolute;
+            transform: translateX(-50%);
+            z-index: 10;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(-50%); }
+            50% { transform: translateY(-15px) translateX(-50%); }
+        }
+
+        .no-float { animation: none !important; transform: translateX(-50%) !important; }
+
+        .active-node {
+            border-color: #60a5fa !important;
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.5) !important;
+            background: rgba(30, 41, 55, 0.95) !important;
+            transform: translateY(-8px) translateX(-50%) scale(1.08) !important;
+            z-index: 50;
+        }
+
+        .icon { font-size: 1.6rem; margin-bottom: 6px; opacity: 0.8; }
+        .title { font-weight: 600; font-size: 0.95rem; color: #f8fafc; letter-spacing: 0.01em; }
+        .desc { font-size: 0.72rem; color: #64748b; margin-top: 4px; line-height: 1.3; font-weight: 300; }
+        
+        .svg-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .path-line { fill: none; stroke: rgba(51, 65, 85, 0.4); stroke-width: 1.5; transition: all 0.6s ease; }
+        .path-active { stroke-width: 4 !important; filter: drop-shadow(0 0 12px currentColor); }
+        
+        .glowing-dot { 
+            fill: #fff; 
+            filter: drop-shadow(0 0 12px currentColor);
+            transition: fill 0.3s, filter 0.3s;
+        }
+
+        .step-log { 
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 1.25rem 2.5rem; 
+            border-radius: 99px; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            line-height: 1.6;
+        }
+
+        .category-label {
+            position: absolute;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #334155;
+            font-weight: 800;
+            pointer-events: none;
+            border-left: 2px solid currentColor;
+            padding-left: 12px;
+        }
+
+        #response-container {
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(20px);
+            opacity: 0;
+            display: none;
+        }
+        #response-container.show {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .subtitle { font-style: italic; color: #93c5fd; font-weight: 600; text-transform: uppercase; margin-right: 8px; }
+        .audio-info { font-size: 0.65rem; color: #475569; margin-top: 6px; }
+    </style>
+</head>
+<body class="min-h-screen py-10 px-4 flex flex-col items-center">
+
+    <!-- HEADER & CONTROLS -->
+    <div class="max-w-4xl w-full flex flex-col items-center gap-8 z-30 mb-4">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold tracking-tight text-slate-200">Arquitectura de Sistema</h1>
+            <p class="text-slate-500 font-medium tracking-widest text-[10px] uppercase mt-1">Clase Magistral Sincronizada: SAP ChatBox Mani</p>
+        </div>
+        
+        <div class="flex flex-col items-center gap-3 w-full">
+            <div class="flex w-full max-w-lg gap-2 p-1.5 bg-slate-900/40 rounded-full border border-white/5 backdrop-blur-xl shadow-2xl">
+                <input type="text" id="userInput" class="flex-grow bg-transparent px-6 py-2.5 text-sm text-white outline-none placeholder:text-slate-700" value="¿Qué pasó con el pedido 800?">
+                <button id="startBtn" onclick="startAnimation()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold py-2.5 px-8 rounded-full transition-all active:scale-95 shadow-lg shadow-indigo-900/20">
+                    Iniciar Flujo Lineal
+                </button>
+            </div>
+            <div id="audio-status" class="audio-info">Esperando carga de voces del sistema...</div>
+        </div>
+
+        <div class="step-log min-h-[75px] flex items-center justify-center opacity-80" id="log-box">
+            Presiona el botón para iniciar la narrativa lineal sin interrupciones.
+        </div>
+
+        <!-- CONTENEDOR DE RESPUESTA FINAL -->
+        <div id="response-container" class="w-full max-w-md bg-slate-900/60 border border-emerald-500/20 backdrop-blur-2xl rounded-2xl p-6 shadow-2xl shadow-emerald-900/10">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-emerald-400 font-bold text-sm tracking-wide">RESULTADO SAP BUSINESS ONE</h3>
+                <span class="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-1 rounded-md font-bold uppercase">Confirmado</span>
+            </div>
+            <div class="space-y-3">
+                <div class="flex justify-between text-xs border-b border-white/5 pb-2">
+                    <span class="text-slate-500">Documento:</span>
+                    <span class="text-white font-medium">Pedido #800</span>
+                </div>
+                <div class="flex justify-between text-xs border-b border-white/5 pb-2">
+                    <span class="text-slate-500">Estado SAP:</span>
+                    <span class="text-emerald-300 font-medium">Cerrado / Entregado</span>
+                </div>
+                <div class="flex justify-between text-xs border-b border-white/5 pb-2">
+                    <span class="text-slate-500">Total Neto:</span>
+                    <span class="text-white font-bold">$1.450,00 USD</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-4 italic leading-relaxed">
+                    "Arquitectura validada. Respuesta humanizada entregada al cliente tras la ingesta de datos del ERP SAP."
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAPA DE ARQUITECTURA -->
+    <div class="relative w-full max-w-5xl h-[1300px] transform origin-top mx-auto mt-4 px-10">
+        
+        <div class="category-label top-[120px] left-[0px]">Capa de Interfaz</div>
+        <div class="category-label top-[450px] left-[0px]">Pasarela de Seguridad</div>
+        <div class="category-label top-[710px] left-[0px]">Capa de Inteligencia</div>
+        <div class="category-label top-[1150px] left-[0px]">Sistemas de Registro</div>
+
+        <svg class="svg-canvas" id="connections" viewBox="0 0 1000 1300">
+            <defs>
+                <filter id="bloom" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="8" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+            </defs>
+
+            <path id="line-user-ui" class="path-line" d="M 500,105 L 500,220" />
+            <path id="line-ui-bridge" class="path-line" d="M 500,310 L 500,440" />
+            <path id="line-bridge-db" class="path-line" d="M 400,480 C 150,480 150,530 150,580" />
+            <path id="line-db-n8n" class="path-line" d="M 150,660 L 150,780" />
+            <path id="line-bridge-orch" class="path-line" d="M 500,530 L 500,700" />
+            <path id="line-orch-llm" class="path-line" d="M 590,745 L 850,745" />
+            <path id="line-orch-mcp" class="path-line" d="M 500,810 L 500,960" />
+            <path id="line-mcp-sap" class="path-line" d="M 500,1050 L 500,1180" />
+
+            <circle id="dot" r="7" class="glowing-dot hidden" filter="url(#bloom)"></circle>
+        </svg>
+
+        <!-- CAJAS -->
+        <div id="node-user" class="box absolute left-[500px] top-[40px] w-48 border-slate-500/20">
+            <div class="icon">🧑‍💻</div>
+            <div class="title">Terminal</div>
+            <div class="desc" id="user-display">Esperando...</div>
+        </div>
+
+        <div id="node-ui" class="box absolute left-[500px] top-[220px] w-52 border-blue-500/20">
+            <div class="icon">💻</div>
+            <div class="title">Chat Interface</div>
+            <div class="desc">React Client App</div>
+        </div>
+
+        <div id="node-bridge" class="box absolute left-[500px] top-[440px] w-56 border-cyan-500/30">
+            <div class="icon">🚦</div>
+            <div class="title">API Gateway</div>
+            <div class="desc">Secure Routing</div>
+        </div>
+
+        <div id="node-db" class="box absolute left-[150px] top-[580px] w-44 border-emerald-500/20">
+            <div class="icon">🗄️</div>
+            <div class="title">Postgres</div>
+            <div class="desc">Log Context</div>
+        </div>
+
+        <div id="node-n8n" class="box absolute left-[150px] top-[780px] w-44 border-emerald-500/30">
+            <div class="icon">⚙️</div>
+            <div class="title">n8n Flows</div>
+            <div class="desc">Automation Engine</div>
+        </div>
+
+        <div id="node-orch" class="box absolute left-[500px] top-[700px] w-56 border-purple-500/30">
+            <div class="icon">🧠</div>
+            <div class="title">Orchestrator</div>
+            <div class="desc">LangGraph Agent</div>
+        </div>
+
+        <div id="node-llm" class="box absolute left-[850px] top-[700px] w-44 border-amber-500/20">
+            <div class="icon">✨</div>
+            <div class="title">Gemini Pro</div>
+            <div class="desc">Reasoning AI</div>
+        </div>
+
+        <div id="node-mcp" class="box absolute left-[500px] top-[960px] w-56 border-cyan-400/30">
+            <div class="icon">🔌</div>
+            <div class="title">MCP Server</div>
+            <div class="desc">Protocol Core</div>
+        </div>
+
+        <div id="node-sap" class="box absolute left-[500px] top-[1180px] w-56 border-amber-600/30">
+            <div class="icon">🏢</div>
+            <div class="title">SAP B1</div>
+            <div class="desc">Service Layer ERP</div>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE RELATOS Y ANIMACIÓN -->
+    <script>
+        const dot = document.getElementById('dot');
+        const logBox = document.getElementById('log-box');
+        const responseContainer = document.getElementById('response-container');
+        const userDisplay = document.getElementById('user-display');
+        const startBtn = document.getElementById('startBtn');
+        const audioStatus = document.getElementById('audio-status');
+        let synth = window.speechSynthesis;
+
+        const COLORS = {
+            DATA: '#3b82f6',
+            INTELLIGENCE: '#c084fc',
+            ERP: '#fbbf24',
+            SUCCESS: '#34d399'
+        };
+
+        const TEACHER_SCRIPT = {
+            user: "En la Terminal del Cliente, capturamos una intención. Aquí comienza la transformación de una pregunta humana en comandos inteligentes de sistema.",
+            ui: "La interfaz React actúa como el primer filtro pedagógico. Empaqueta el payload y prepara una conexión segura y encriptada hacia el backend.",
+            bridge: "El Gateway Node-js es nuestro cerebro de ruteo. Autentica la petición y decide cómo orquestar los datos hacia los servicios de valor.",
+            db: "Procedemos a registrar el contexto en Postgres. Esto garantiza una memoria conversacional completa de cada interacción en el proyecto.",
+            n8n: "Simultáneamente, activamos los flujos de n-8-n. El motor de automatización procesa métricas en segundo plano para una observabilidad total.",
+            orch: "Llegamos al orquestador Lang-Graph. Aquí ejecutamos el ciclo Re-Act, evaluando si el sistema requiere consultar herramientas externas o internos.",
+            llm: "Gemini Pro es nuestro núcleo cognitivo. El orquestador le consulta para predecir si la información reside en SAP o si basta con un razonamiento directo.",
+            mcp: "A través del protocolo M-C-P, estandarizamos la comunicación. Esta capa de abstracción traduce las necesidades de la IA en consultas estructuradas seguras.",
+            sap: "Finalmente, conectamos con el Service Layer de SAP Business One. Extraemos documentos reales, cerrando la brecha entre la IA corporativa y los datos del ERP.",
+            final: "Ciclo educativo completado. La respuesta sintetizada ha regresado al usuario. Arquitectura operando al cien por ciento."
+        };
+
+        const sleep = ms => new Promise(res => setTimeout(res, ms));
+
+        function getSpanishVoice() {
+            const voices = synth.getVoices();
+            return voices.find(v => v.name.includes('Jorge') || v.name.includes('Juan') || v.name.includes('Mónica')) || 
+                   voices.find(v => v.lang.startsWith('es')) || 
+                   voices[0];
+        }
+
+        const resolveVoices = () => {
+            const voices = synth.getVoices();
+            if (voices.length > 0) {
+                const voice = getSpanishVoice();
+                audioStatus.innerText = `Sistema de Audio: Listo (${voice ? voice.name : 'Nativo'}).`;
+            }
+        };
+        if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = resolveVoices;
+        resolveVoices();
+
+        // FUNCIÓN MAESTRA NARRATIVA (LINEAL Y PERSISTENTE)
+        function narrateLineal(nodeId, text) {
+            return new Promise((resolve) => {
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voice = getSpanishVoice();
+                if (voice) utterance.voice = voice;
+                utterance.lang = 'es-ES';
+                utterance.rate = 0.95;
+                utterance.pitch = 1.0;
+                
+                const node = document.getElementById(`node-${nodeId}`);
+                node.classList.add('active-node');
+                logBox.innerHTML = `<span class="subtitle">DOCENTE:</span> "${text}"`;
+
+                utterance.onend = () => {
+                    setTimeout(() => {
+                        node.classList.remove('active-node');
+                        resolve();
+                    }, 500); // Pausa táctica después de hablar
+                };
+
+                utterance.onerror = () => {
+                    node.classList.remove('active-node');
+                    resolve();
+                };
+
+                synth.speak(utterance);
+                
+                // Fallback de seguridad (timeout preventivo)
+                setTimeout(() => { if (!synth.speaking) resolve(); }, text.length * 150);
+            });
+        }
+
+        async function animatePath(pathId, durationMs, color = COLORS.DATA) {
+            const path = document.getElementById(pathId);
+            const length = path.getTotalLength();
+            dot.style.color = color;
+            dot.classList.remove('hidden');
+            path.classList.add('path-active');
+            path.style.stroke = color;
+            
+            const start = performance.now();
+            return new Promise(resolve => {
+                function frame(time) {
+                    let progress = (time - start) / durationMs;
+                    if (progress > 1) progress = 1;
+                    const point = path.getPointAtLength(progress * length);
+                    dot.setAttribute('cx', point.x);
+                    dot.setAttribute('cy', point.y);
+                    if (progress < 1) requestAnimationFrame(frame);
+                    else {
+                        setTimeout(() => {
+                            path.classList.remove('path-active');
+                            path.style.stroke = "rgba(51, 65, 85, 0.4)";
+                            resolve();
+                        }, 200);
+                    }
+                }
+                requestAnimationFrame(frame);
+            });
+        }
+
+        async function startAnimation() {
+            startBtn.disabled = true;
+            synth.cancel();
+            responseContainer.classList.remove('show');
+            document.querySelectorAll('.box').forEach(b => b.classList.add('no-float'));
+            
+            const userMsg = document.getElementById('userInput').value;
+            userDisplay.innerText = `"${userMsg}"`;
+            dot.classList.add('hidden');
+            
+            // FLUJO ESTRICTAMENTE LINEAL (SIN CORTES)
+            
+            await narrateLineal('user', TEACHER_SCRIPT.user);
+            await animatePath('line-user-ui', 800, COLORS.DATA);
+            
+            await narrateLineal('ui', TEACHER_SCRIPT.ui);
+            await animatePath('line-ui-bridge', 800, COLORS.DATA);
+
+            await narrateLineal('bridge', TEACHER_SCRIPT.bridge);
+            
+            // Ramal Persistencia (Ahora secuencial para no cortar el audio)
+            await animatePath('line-bridge-db', 1000, COLORS.DATA);
+            await narrateLineal('db', TEACHER_SCRIPT.db);
+            await animatePath('line-db-n8n', 800, COLORS.DATA);
+            await narrateLineal('n8n', TEACHER_SCRIPT.n8n);
+
+            // Volver al flujo central
+            await animatePath('line-bridge-orch', 1200, COLORS.INTELLIGENCE);
+            await narrateLineal('orch', TEACHER_SCRIPT.orch);
+
+            await animatePath('line-orch-llm', 600, COLORS.INTELLIGENCE);
+            await narrateLineal('llm', TEACHER_SCRIPT.llm);
+            await animatePath('line-orch-llm', 600, COLORS.INTELLIGENCE);
+
+            await animatePath('line-orch-mcp', 800, COLORS.DATA);
+            await narrateLineal('mcp', TEACHER_SCRIPT.mcp);
+
+            await animatePath('line-mcp-sap', 1000, COLORS.ERP);
+            await narrateLineal('sap', TEACHER_SCRIPT.sap);
+            
+            // Retorno visual y entrega
+            await animatePath('line-mcp-sap', 800, COLORS.ERP);
+            await animatePath('line-orch-mcp', 800, COLORS.DATA);
+            await animatePath('line-bridge-orch', 800, COLORS.SUCCESS);
+            await animatePath('line-ui-bridge', 800, COLORS.SUCCESS);
+            await animatePath('line-user-ui', 800, COLORS.SUCCESS);
+            
+            responseContainer.classList.add('show');
+            await narrateLineal('user', TEACHER_SCRIPT.final);
+            
+            dot.classList.add('hidden');
+            startBtn.disabled = false;
+            document.querySelectorAll('.box').forEach(b => b.classList.remove('no-float'));
+        }
+    </script>
+</body>
+</html>
