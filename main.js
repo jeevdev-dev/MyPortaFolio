@@ -69,3 +69,53 @@ document.querySelectorAll('.project-card, .stack-item').forEach((el, i) => {
   el.classList.add('animate-in');
   observer.observe(el);
 });
+
+// ─── Modal Gallery: ChatBox Mani ──────────────
+let currentImgIndex = 0;
+const maniImages = [
+  'assets/img/chatbox-mani/step-1.png',
+  'assets/img/chatbox-mani/step-2.png',
+  'assets/img/chatbox-mani/step-3.png',
+  'assets/img/chatbox-mani/step-4.png',
+  'assets/img/chatbox-mani/step-5.png'
+];
+
+function openGallery() {
+  currentImgIndex = 0;
+  updateGallery();
+  const modal = document.getElementById('gallery-modal');
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeGallery() {
+  const modal = document.getElementById('gallery-modal');
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function nextImg() {
+  currentImgIndex = (currentImgIndex + 1) % maniImages.length;
+  updateGallery();
+}
+
+function prevImg() {
+  currentImgIndex = (currentImgIndex - 1 + maniImages.length) % maniImages.length;
+  updateGallery();
+}
+
+function updateGallery() {
+  const img = document.getElementById('modal-img');
+  const counter = document.getElementById('modal-counter');
+  img.src = maniImages[currentImgIndex];
+  counter.textContent = `${currentImgIndex + 1} / ${maniImages.length}`;
+}
+
+// Close on escape or outside click
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeGallery();
+});
+
+document.getElementById('gallery-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'gallery-modal') closeGallery();
+});

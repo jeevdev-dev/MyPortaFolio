@@ -120,7 +120,7 @@ agent <span class="c-white">=</span> Agent(
           </div>
           <div class="card-footer" style="flex-direction: column; align-items: flex-start; gap: 12px;">
             <div style="display: flex; gap: 15px; width: 100%;">
-              <a href="assets/docs/sap-chatbox-execution.pdf" target="_blank" class="card-link demo-link" style="margin-right:0">Ver Ejecución (PDF) →</a>
+              <button onclick="openGallery()" class="card-link demo-link" style="background: none; border: none; padding: 0; cursor: pointer; text-align: left;">Ver Ejecución (5 Capturas) →</button>
               <a href="assets/docs/sap-chatbox-architecture.html" target="_blank" class="card-link" style="color: var(--accent-cyan); font-weight: 600;">Arquitectura Viva ⚡</a>
             </div>
             <span class="card-status online">● En Ejecución (Oracle Cloud)</span>
@@ -290,5 +290,19 @@ agent <span class="c-white">=</span> Agent(
   </footer>
 
   <script src="main.js"></script>
+
+  <!-- MODAL GALLERY -->
+  <div id="gallery-modal" class="modal">
+    <button class="modal-close" onclick="closeGallery()">&times;</button>
+    <div class="modal-content">
+      <img id="modal-img" class="modal-img" src="" alt="ChatBox Mani Execution">
+      <div class="modal-nav">
+        <button class="modal-btn" onclick="prevImg()">&#8249;</button>
+        <button class="modal-btn" onclick="nextImg()">&#8250;</button>
+      </div>
+      <div id="modal-counter" class="modal-counter">1 / 5</div>
+    </div>
+  </div>
+
 </body>
 </html>
